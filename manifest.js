@@ -24,8 +24,6 @@ var manifest = {
         labels: ['web']
     }],
     plugins: {
-        'hapi-auth-basic': {},
-        'hapi-auth-cookie': {},
         'crumb': {
             restful: true
         },
@@ -37,20 +35,6 @@ var manifest = {
             relativeTo: __dirname,
             path: './server/web'
         },
-        'hapi-mongo-models': {
-            mongodb: Config.get('/hapiMongoModels/mongodb'),
-            models: {
-                Account: './server/models/account',
-                AdminGroup: './server/models/admin-group',
-                Admin: './server/models/admin',
-                AuthAttempt: './server/models/auth-attempt',
-                Session: './server/models/session',
-                Status: './server/models/status',
-                User: './server/models/user'
-            },
-            autoIndex: Config.get('/hapiMongoModels/autoIndex')
-        },
-        './server/auth': {},
         './server/mailer': {},
         './server/api/accounts': { basePath: '/api' },
         './server/api/admin-groups': { basePath: '/api' },
