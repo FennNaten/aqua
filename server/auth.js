@@ -1,8 +1,18 @@
 var Async = require('async');
 var Config = require('../config');
 
+var internals = {};
 
 exports.register = function (server, options, next) {
+
+    //the registration logic in internals.after will be executed on server start, and only after dependencies are fully registered. 
+    server.dependency(['hapi-auth-cookie', 'hapi-mongo-models'], internals.after);
+
+    next();
+};
+
+//all the registration logic depends on other plugins (uses schemes and plugins-specific space), so we extract it so that we can set it up to be fired only after dependency resolution
+internals.after = function(server, next){
 
     var Session = server.plugins['hapi-mongo-models'].Session;
     var User = server.plugins['hapi-mongo-models'].User;
@@ -64,7 +74,6 @@ exports.register = function (server, options, next) {
 
     next();
 };
-
 
 exports.preware = {};
 

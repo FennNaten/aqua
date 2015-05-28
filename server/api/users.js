@@ -2,8 +2,19 @@ var Joi = require('joi');
 var Hoek = require('hoek');
 var AuthPlugin = require('../auth');
 
+var internals = {};
 
 exports.register = function (server, options, next) {
+
+    //the registration logic returned by internals.getAfter will be executed on server start, and only after dependencies are fully registered.
+    //the options have to be bound, as the callback format for server.dependency has signature function(server, next)
+    server.dependency(['auth', 'hapi-mongo-models'], internals.after.bind(internals, options));
+
+
+    next();
+};
+
+internals.after = function(options, server, next){
 
     options = Hoek.applyToDefaults({ basePath: '' }, options);
 
@@ -557,8 +568,8 @@ exports.register = function (server, options, next) {
 
 
     next();
-};
 
+}
 
 exports.register.attributes = {
     name: 'users'
